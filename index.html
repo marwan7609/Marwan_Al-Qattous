@@ -465,17 +465,21 @@
                 </div>
 
                 <div class="glass form reveal">
-                    <form onsubmit="event.preventDefault();">
-                        <input type="text" id="iName" class="input" placeholder="الاسم الكريم" required>
-                        <input type="tel" id="iPhone" class="input" placeholder="رقم الهاتف" required>
-                        <select id="iService" class="input" required>
+                    <form id="contactForm" action="https://formsubmit.co/marwanalqatous@gmail.com" method="POST">
+                        <input type="hidden" name="_subject" value="رسالة جديدة من موقع مروان القطوس">
+                        <input type="hidden" name="_template" value="table">
+                        <input type="text" name="_honey" style="display:none">
+                        <input type="hidden" name="_captcha" value="true">
+                        <input type="text" id="iName" name="name" class="input" placeholder="الاسم الكريم" required>
+                        <input type="tel" id="iPhone" name="phone" class="input" placeholder="رقم الهاتف" required>
+                        <select id="iService" name="service" class="input" required>
                             <option value="" disabled selected data-i18n="oDef">اختر نوع الخدمة</option>
                             <option value="pos" data-i18n="oPos">نظام نقاط بيع (POS)</option>
                             <option value="web" data-i18n="oWeb">بوابة مؤسسية / موقع</option>
                             <option value="sup" data-i18n="oSup">نظام دعم فني</option>
                             <option value="oth" data-i18n="oOth">استشارة تقنية</option>
                         </select>
-                        <textarea id="iMsg" class="input" placeholder="تفاصيل رسالتك..." required></textarea>
+                        <textarea id="iMsg" name="message" class="input" placeholder="تفاصيل رسالتك..." required></textarea>
                         <button type="submit" class="btn btn-primary" style="width:100%; padding:15px; font-size:1.1rem;" data-i18n="btnSend">إرسال الرسالة</button>
                     </form>
                 </div>
