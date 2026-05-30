@@ -224,6 +224,27 @@
         .input { width: 100%; padding: 15px; background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 12px; color: var(--text-main); font-family: inherit; font-size: 1rem; transition: 0.3s; }
         .input:focus { outline: none; border-color: var(--primary); background: rgba(157, 0, 255, 0.05); box-shadow: 0 0 15px rgba(157, 0, 255, 0.1); }
         textarea.input { height: 130px; resize: vertical; }
+        .form-status {
+            display: none;
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            line-height: 1.6;
+            text-align: center;
+            margin: 5px 0;
+        }
+        .form-status.success {
+            display: block;
+            color: #16a34a;
+            background: rgba(34, 197, 94, 0.12);
+            border: 1px solid rgba(34, 197, 94, 0.45);
+        }
+        .form-status.error {
+            display: block;
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.45);
+        }
         
         /* Custom Select Fix for Dark/Light Mode */
         select.input {
@@ -456,6 +477,7 @@
                     <div class="contact-details">
                         <div class="c-item"><i class="fas fa-map-marker-alt"></i> <span data-i18n="pvLoc">نالوت – ليبيا</span></div>
                         <div class="c-item"><i class="fas fa-phone-alt"></i> <span dir="ltr">0916571926</span></div>
+                        <div class="c-item"><i class="fas fa-envelope"></i> <a href="mailto:marwanalqatous@gmail.com" dir="ltr">marwanalqatous@gmail.com</a></div>
                         <div class="c-item"><i class="fab fa-facebook"></i> <a href="https://www.facebook.com/share/17SdFtuFX1/" target="_blank" data-i18n="cFb">فيسبوك مروان</a></div>
                     </div>
                     <div style="display:flex; gap:15px; margin-top:30px; flex-wrap:wrap;">
@@ -465,13 +487,15 @@
                 </div>
 
                 <div class="glass form reveal">
-                    <form id="contactForm" action="https://formsubmit.co/marwanalqatous@gmail.com" method="POST">
+                    <form id="contactForm" action="https://formsubmit.co/ajax/marwanalqatous@gmail.com" method="POST">
                         <input type="hidden" name="_subject" value="رسالة جديدة من موقع مروان القطوس">
                         <input type="hidden" name="_template" value="table">
-                        <input type="text" name="_honey" style="display:none">
-                        <input type="hidden" name="_captcha" value="true">
-                        <input type="text" id="iName" name="name" class="input" placeholder="الاسم الكريم" required>
-                        <input type="tel" id="iPhone" name="phone" class="input" placeholder="رقم الهاتف" required>
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" id="replyTo" name="_replyto" value="">
+                        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+                        <input type="text" id="iName" name="name" class="input" placeholder="الاسم الكريم" autocomplete="name" minlength="2" maxlength="80" required>
+                        <input type="email" id="iEmail" name="email" class="input" placeholder="البريد الإلكتروني" autocomplete="email" maxlength="120" required>
+                        <input type="tel" id="iPhone" name="phone" class="input" placeholder="رقم الهاتف" autocomplete="tel" minlength="7" maxlength="25" required>
                         <select id="iService" name="service" class="input" required>
                             <option value="" disabled selected data-i18n="oDef">اختر نوع الخدمة</option>
                             <option value="pos" data-i18n="oPos">نظام نقاط بيع (POS)</option>
@@ -479,8 +503,9 @@
                             <option value="sup" data-i18n="oSup">نظام دعم فني</option>
                             <option value="oth" data-i18n="oOth">استشارة تقنية</option>
                         </select>
-                        <textarea id="iMsg" name="message" class="input" placeholder="تفاصيل رسالتك..." required></textarea>
-                        <button type="submit" class="btn btn-primary" style="width:100%; padding:15px; font-size:1.1rem;" data-i18n="btnSend">إرسال الرسالة</button>
+                        <textarea id="iMsg" name="message" class="input" placeholder="تفاصيل رسالتك..." minlength="10" maxlength="1500" required></textarea>
+                        <div id="formStatus" class="form-status" role="alert" aria-live="polite"></div>
+                        <button id="sendBtn" type="submit" class="btn btn-primary" style="width:100%; padding:15px; font-size:1.1rem;" data-i18n="btnSend">إرسال الرسالة</button>
                     </form>
                 </div>
             </div>
@@ -535,7 +560,7 @@
                 wfTitle: "من الفكرة إلى النظام", w1: "1. فهم الاحتياج", w1d: "دراسة المشكلة الحقيقية والهدف من النظام.", w2: "2. تحليل المتطلبات", w2d: "تحويل الفكرة إلى وظائف، شاشات، وتدفقات عمل.", w3: "3. التنفيذ والاختبار", w3d: "برمجة النظام واختبار تجربة المستخدم وصلاحياته.",
                 cTitle: "لنبنِ شيئًا عمليًا", cDesc: "إذا كنت تحتاج إلى منظومة أو حل تقني ينظم عملك، تواصل معي لمناقشة الفكرة وتحويلها لواقع.", cFb: "فيسبوك مروان", cCall: "اتصال مباشر", cWa: "واتساب",
                 oDef: "اختر نوع الخدمة", oPos: "نظام نقاط بيع (POS)", oWeb: "بوابة مؤسسية / موقع", oSup: "نظام دعم فني", oOth: "استشارة تقنية",
-                phName: "الاسم الكريم", phPhone: "رقم الهاتف", phMsg: "تفاصيل رسالتك...", btnSend: "إرسال الرسالة", fCopy: "© جميع الحقوق محفوظة — مروان القطوس 2026"
+                phName: "الاسم الكريم", phEmail: "البريد الإلكتروني", phPhone: "رقم الهاتف", phMsg: "تفاصيل رسالتك...", btnSend: "إرسال الرسالة", fCopy: "© جميع الحقوق محفوظة — مروان القطوس 2026"
             },
             en: {
                 logoText: "Marwan Alqattous", logoBadge: "EvoTech",
@@ -556,7 +581,7 @@
                 wfTitle: "Idea to System", w1: "1. Understanding", w1d: "Studying the real problem and system goals.", w2: "2. Analysis", w2d: "Turning ideas into functions, screens, and workflows.", w3: "3. Execution & Testing", w3d: "Programming and testing UX and permissions.",
                 cTitle: "Let's Build Something", cDesc: "If you need a system or tech solution, contact me to turn your idea into reality.", cFb: "Marwan's Facebook", cCall: "Call Now", cWa: "WhatsApp",
                 oDef: "Select Service", oPos: "Point of Sale (POS)", oWeb: "Corporate Portal / Web", oSup: "IT Support System", oOth: "Consultation",
-                phName: "Your Name", phPhone: "Phone Number", phMsg: "Message Details...", btnSend: "Send Message", fCopy: "© All Rights Reserved — Marwan Alqattous 2026"
+                phName: "Your Name", phEmail: "Email Address", phPhone: "Phone Number", phMsg: "Message Details...", btnSend: "Send Message", fCopy: "© All Rights Reserved — Marwan Alqattous 2026"
             }
         };
 
@@ -594,6 +619,7 @@
             });
 
             document.getElementById('iName').placeholder = dict[lang]['phName'];
+            document.getElementById('iEmail').placeholder = dict[lang]['phEmail'];
             document.getElementById('iPhone').placeholder = dict[lang]['phPhone'];
             document.getElementById('iMsg').placeholder = dict[lang]['phMsg'];
             
@@ -681,6 +707,71 @@
                 e.preventDefault();
                 document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
             });
+        });
+
+        // 9. Contact Form Submit with Success/Error Message
+        const contactForm = document.getElementById('contactForm');
+        const formStatus = document.getElementById('formStatus');
+        const sendBtn = document.getElementById('sendBtn');
+        const emailField = document.getElementById('iEmail');
+        const replyToField = document.getElementById('replyTo');
+        const defaultSendText = sendBtn.innerHTML;
+
+        function showFormStatus(type, message) {
+            formStatus.className = `form-status ${type}`;
+            formStatus.innerText = message;
+        }
+
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            if (!contactForm.checkValidity()) {
+                contactForm.reportValidity();
+                return;
+            }
+
+            formStatus.className = 'form-status';
+            formStatus.innerText = '';
+            replyToField.value = emailField.value.trim();
+            sendBtn.disabled = true;
+            sendBtn.style.opacity = '0.75';
+            sendBtn.innerText = currentLang === 'ar' ? 'جاري الإرسال...' : 'Sending...';
+
+            try {
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: new FormData(contactForm),
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                let result = {};
+                try {
+                    result = await response.json();
+                } catch (_) {}
+
+                if (!response.ok || (result && result.success === false)) {
+                    throw new Error(result.message || 'Submit failed');
+                }
+
+                showFormStatus(
+                    'success',
+                    currentLang === 'ar'
+                        ? 'تم إرسال رسالتك بنجاح. سأرد عليك في أقرب وقت.'
+                        : 'Your message was sent successfully. I will reply as soon as possible.'
+                );
+                contactForm.reset();
+            } catch (error) {
+                showFormStatus(
+                    'error',
+                    currentLang === 'ar'
+                        ? 'تعذر إرسال الرسالة الآن. تأكد من اتصال الإنترنت، أو راسلني مباشرة عبر واتساب.'
+                        : 'The message could not be sent now. Check your internet connection, or contact me directly on WhatsApp.'
+                );
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.style.opacity = '1';
+                sendBtn.innerHTML = defaultSendText;
+            }
         });
     </script>
 </body>
